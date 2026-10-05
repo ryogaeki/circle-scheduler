@@ -4,6 +4,7 @@ import test from "node:test";
 import { createDefaultSchedulerConfig } from "../defaultConfig";
 import { FORBIDDEN_SCORE } from "../types";
 import { buildScoreTableFromSongCsv } from "./buildScoreTableFromSongCsv";
+import { EXAMPLE_SONG_CSV } from "./exampleSongCsv";
 import { parseSongCsv } from "./parseSongCsv";
 
 test("調整さんCSVから曲、日付番号、日内番号を読み取る", () => {
@@ -45,4 +46,11 @@ test("人ごとCSVを曲ごとCSVとして読み込まない", () => {
   ].join("\n");
 
   assert.throws(() => parseSongCsv(csvText), /人ごとの予定CSV/);
+});
+
+test("ホーム画面の例題CSVを3曲・12枠として読み取る", () => {
+  const csvData = parseSongCsv(EXAMPLE_SONG_CSV);
+
+  assert.equal(csvData.songs.length, 3);
+  assert.equal(csvData.timeSlots.length, 12);
 });

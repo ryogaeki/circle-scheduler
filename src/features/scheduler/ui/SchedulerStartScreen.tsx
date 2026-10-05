@@ -4,6 +4,7 @@ import {
   ArrowRight,
   CalendarDays,
   FileSpreadsheet,
+  Play,
   Upload,
 } from "lucide-react";
 import Image from "next/image";
@@ -12,12 +13,20 @@ import { useEffect, useState, type ChangeEvent, type DragEvent } from "react";
 
 import { GitHubMark } from "../../../components/GitHubMark";
 import { publicPath } from "../../../lib/publicPath";
+import {
+  EXAMPLE_SONG_CSV,
+  EXAMPLE_SONG_CSV_FILE_NAME,
+} from "../input/exampleSongCsv";
 import { parseSongCsv } from "../input/parseSongCsv";
 import {
   loadSchedulerSession,
   savePendingCsv,
   type StoredSchedulerSession,
 } from "../session/schedulerSessionStorage";
+import {
+  StartPageFooter,
+  StartPageOverview,
+} from "./StartPageOverview";
 
 export function SchedulerStartScreen() {
   const router = useRouter();
@@ -29,15 +38,24 @@ export function SchedulerStartScreen() {
     setSession(loadSchedulerSession());
   }, []);
 
-  const openCsv = async (file: File) => {
+  const openCsvText = (fileName: string, csvText: string) => {
     setErrorMessage(null);
     try {
-      const csvText = await file.text();
       parseSongCsv(csvText);
-      if (!savePendingCsv({ fileName: file.name, csvText })) {
+      if (!savePendingCsv({ fileName, csvText })) {
         throw new Error("ブラウザにCSVを保存できませんでした。");
       }
       router.push("/scheduler");
+    } catch (error) {
+      setErrorMessage(
+        error instanceof Error ? error.message : "CSVを読み込めませんでした。",
+      );
+    }
+  };
+
+  const openCsv = async (file: File) => {
+    try {
+      openCsvText(file.name, await file.text());
     } catch (error) {
       setErrorMessage(
         error instanceof Error ? error.message : "CSVを読み込めませんでした。",
@@ -103,43 +121,53 @@ export function SchedulerStartScreen() {
       </header>
 
       <main className="start-main">
-        <div className="start-content">
+        <section className="start-hero" aria-labelledby="start-title">
+          <div className="start-hero-copy">
+            <p className="start-kicker">ENSEMBLE SCHEDULER</p>
+            <h1 id="start-title">ぶるさぁ。専用予定調査アプリ</h1>
+            <p className="start-lead">
+              みんなの○△×から、曲数や希望を考えた練習予定を自動で組み立てます。
+            </p>
+
+            {session && (
+              <section className="resume-session" aria-labelledby="resume-heading">
+                <div className="resume-session-copy">
+                  <span id="resume-heading">前回の作業</span>
+                  <strong>{session.fileName}</strong>
+                  <small>
+                    {session.timeSlotCount}時間枠・{session.songCount}曲・{savedAt}保存
+                  </small>
+                </div>
+                <button
+                  className="button primary"
+                  type="button"
+                  onClick={() => router.push("/scheduler")}
+                >
+                  作業を続ける
+                  <ArrowRight aria-hidden="true" size={17} />
+                </button>
+              </section>
+            )}
+          </div>
+
           <Image
-            className="start-logo"
-            src={publicPath("/burusaa-logo.png")}
-            alt="ぶるさぁ。ロゴ"
-            width={210}
-            height={174}
+            className="start-hero-image"
+            src={publicPath("/scheduler-hero.png")}
+            alt="マスコットが練習予定をカレンダーに並べているイラスト"
+            width={887}
+            height={444}
             priority
           />
-          <h1>ぶるさぁ。専用予定調査アプリ</h1>
+        </section>
 
-          {session && (
-            <section className="resume-session" aria-labelledby="resume-heading">
-              <div className="resume-session-copy">
-                <span id="resume-heading">前回の作業</span>
-                <strong>{session.fileName}</strong>
-                <small>
-                  {session.timeSlotCount}時間枠・{session.songCount}曲・{savedAt}保存
-                </small>
-              </div>
-              <button
-                className="button primary"
-                type="button"
-                onClick={() => router.push("/scheduler")}
-              >
-                作業を続ける
-                <ArrowRight aria-hidden="true" size={17} />
-              </button>
-            </section>
-          )}
-
-          <section className="start-upload" aria-labelledby="start-upload-heading">
+        <section className="start-actions" aria-label="アプリを始める">
+          <div className="start-upload">
             <div className="start-section-heading">
               <FileSpreadsheet aria-hidden="true" size={21} />
-              <h2 id="start-upload-heading">
-                {session ? "新しいCSVから始める" : "曲ごとCSVを開く"}
-              </h2>
+              <div>
+                <p>CREATE SCHEDULE</p>
+                <h2>{session ? "新しいCSVから始める" : "曲ごとCSVを開く"}</h2>
+              </div>
             </div>
             <div
               className={`start-drop-zone${dragging ? " is-dragging" : ""}`}
@@ -152,8 +180,11 @@ export function SchedulerStartScreen() {
               onDrop={handleDrop}
             >
               <Upload aria-hidden="true" size={28} />
-              <strong>CSVファイルをドロップ</strong>
-              <label className="button secondary">
+              <div>
+                <strong>CSVファイルをドロップ</strong>
+                <small>調整さんの「各曲ごと」CSVに対応</small>
+              </div>
+              <label className="button primary">
                 <FileSpreadsheet aria-hidden="true" size={17} />
                 CSVを選択
                 <input
@@ -164,34 +195,50 @@ export function SchedulerStartScreen() {
                 />
               </label>
             </div>
-          </section>
+            <button
+              className="start-example-button"
+              type="button"
+              onClick={() =>
+                openCsvText(EXAMPLE_SONG_CSV_FILE_NAME, EXAMPLE_SONG_CSV)
+              }
+            >
+              <Play aria-hidden="true" size={15} />
+              CSVがない方は例題で試す
+            </button>
+          </div>
 
-          <section className="start-utility" aria-labelledby="start-utility-heading">
+          <div className="start-utility">
             <div className="start-section-heading">
               <CalendarDays aria-hidden="true" size={21} />
-              <h2 id="start-utility-heading">調整さんの日程を作る</h2>
+              <div>
+                <p>DATE OPTIONS</p>
+                <h2>調整さんの日程を作る</h2>
+              </div>
             </div>
             <button
               className="start-utility-button"
               type="button"
               onClick={() => router.push("/date-options")}
             >
-              <CalendarDays aria-hidden="true" size={24} />
+              <CalendarDays aria-hidden="true" size={25} />
               <span>
                 <strong>日付と時間から日程文を作成</strong>
-                <small>コピー・テキスト保存</small>
+                <small>カレンダーで選択して、すぐコピー</small>
               </span>
               <ArrowRight aria-hidden="true" size={18} />
             </button>
-          </section>
+          </div>
 
           {errorMessage && (
             <div className="inline-alert error start-error" role="alert">
               {errorMessage}
             </div>
           )}
-        </div>
+        </section>
+
+        <StartPageOverview />
       </main>
+      <StartPageFooter />
     </div>
   );
 }
