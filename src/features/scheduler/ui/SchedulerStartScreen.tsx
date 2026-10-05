@@ -122,11 +122,18 @@ export function SchedulerStartScreen() {
 
       <main className="start-main">
         <section className="start-hero" aria-labelledby="start-title">
+          <Image
+            className="start-hero-logo"
+            src={publicPath("/burusaa-logo.png")}
+            alt=""
+            width={104}
+            height={86}
+            priority
+          />
           <div className="start-hero-copy">
-            <p className="start-kicker">ENSEMBLE SCHEDULER</p>
             <h1 id="start-title">ぶるさぁ。専用予定調査アプリ</h1>
             <p className="start-lead">
-              みんなの○△×から、曲数や希望を考えた練習予定を自動で組み立てます。
+              集めた○△×から、曲数や希望を考えた練習予定を作成します。
             </p>
 
             {session && (
@@ -149,25 +156,13 @@ export function SchedulerStartScreen() {
               </section>
             )}
           </div>
-
-          <Image
-            className="start-hero-image"
-            src={publicPath("/scheduler-hero.png")}
-            alt="マスコットが練習予定をカレンダーに並べているイラスト"
-            width={887}
-            height={444}
-            priority
-          />
         </section>
 
         <section className="start-actions" aria-label="アプリを始める">
           <div className="start-upload">
             <div className="start-section-heading">
               <FileSpreadsheet aria-hidden="true" size={21} />
-              <div>
-                <p>CREATE SCHEDULE</p>
-                <h2>{session ? "新しいCSVから始める" : "曲ごとCSVを開く"}</h2>
-              </div>
+              <h2>{session ? "新しいCSVから始める" : "曲ごとCSVを開く"}</h2>
             </div>
             <div
               className={`start-drop-zone${dragging ? " is-dragging" : ""}`}
@@ -210,10 +205,7 @@ export function SchedulerStartScreen() {
           <div className="start-utility">
             <div className="start-section-heading">
               <CalendarDays aria-hidden="true" size={21} />
-              <div>
-                <p>DATE OPTIONS</p>
-                <h2>調整さんの日程を作る</h2>
-              </div>
+              <h2>調整さんの日程を作る</h2>
             </div>
             <button
               className="start-utility-button"

@@ -1,6 +1,6 @@
 import {
+  ArrowRight,
   CalendarRange,
-  FileSpreadsheet,
   ListChecks,
   SlidersHorizontal,
 } from "lucide-react";
@@ -8,53 +8,72 @@ import Link from "next/link";
 
 import { GitHubMark } from "../../../components/GitHubMark";
 
-const FLOW_STEPS = [
-  {
-    icon: FileSpreadsheet,
-    number: "01",
-    title: "予定を読み込む",
-    description: "調整さんの曲ごとCSVを、そのままブラウザで読み込みます。",
-  },
-  {
-    icon: SlidersHorizontal,
-    number: "02",
-    title: "条件を整える",
-    description: "曲数、確定枠、希望枠などを曲ごとに調整します。",
-  },
-  {
-    icon: CalendarRange,
-    number: "03",
-    title: "候補を比べる",
-    description: "自動作成された予定を比べ、カレンダー上で仕上げます。",
-  },
-] as const;
-
 export function StartPageOverview() {
   return (
     <section className="start-overview" aria-labelledby="overview-heading">
       <div className="start-overview-heading">
-        <p className="start-kicker">FROM RESPONSES TO SCHEDULE</p>
-        <h2 id="overview-heading">集めた希望を、練習予定へ。</h2>
+        <h2 id="overview-heading">○△×を、比較できる予定候補へ</h2>
         <p>
-          空いている日を眺め続ける代わりに、条件を保った候補をまとめて作ります。
+          曲数や確定枠などの条件を反映し、候補をカレンダーで確認できます。
         </p>
       </div>
 
-      <ol className="start-flow" aria-label="予定作成の流れ">
-        {FLOW_STEPS.map((step) => {
-          const Icon = step.icon;
-          return (
-            <li key={step.number}>
-              <span className="start-flow-number">{step.number}</span>
-              <span className="start-flow-icon">
-                <Icon aria-hidden="true" size={25} />
-              </span>
-              <h3>{step.title}</h3>
-              <p>{step.description}</p>
-            </li>
-          );
-        })}
-      </ol>
+      <div className="start-preview" aria-label="CSVから予定候補を作る流れ">
+        <section className="start-preview-input">
+          <header>
+            <strong>曲ごとCSV</strong>
+            <span>3曲・4時間枠</span>
+          </header>
+          <div className="start-preview-grid" aria-hidden="true">
+            <span>日時</span>
+            <span>曲 A</span>
+            <span>曲 B</span>
+            <span>曲 C</span>
+            <span>18:00</span>
+            <b>○</b>
+            <b>△</b>
+            <b>×</b>
+            <span>18:45</span>
+            <b>△</b>
+            <b>○</b>
+            <b>○</b>
+            <span>19:30</span>
+            <b>○</b>
+            <b>×</b>
+            <b>△</b>
+            <span>20:15</span>
+            <b>○</b>
+            <b>△</b>
+            <b>○</b>
+          </div>
+        </section>
+
+        <div className="start-preview-arrow" aria-hidden="true">
+          <ArrowRight size={22} />
+          <span>条件を反映</span>
+        </div>
+
+        <section className="start-preview-output">
+          <header>
+            <strong>予定候補</strong>
+            <span>候補 #1</span>
+          </header>
+          <div className="start-preview-schedule" aria-hidden="true">
+            <span>18:00</span>
+            <strong>曲 A</strong>
+            <small>○</small>
+            <span>18:45</span>
+            <strong>曲 B</strong>
+            <small>○</small>
+            <span>19:30</span>
+            <strong>曲 C</strong>
+            <small>△</small>
+            <span>20:15</span>
+            <strong>曲 A</strong>
+            <small>○</small>
+          </div>
+        </section>
+      </div>
 
       <div className="start-capabilities" aria-label="主な機能">
         <span>
