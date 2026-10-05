@@ -1,0 +1,30 @@
+# C++ build outputs
+/scheduler
+/scheduler_direct_check
+/scheduler_tests
+*.o
+*.out
+
+# Node / Next.js outputs
+node_modules/
+.next/
+out/
+dist/
+coverage/
+*.tsbuildinfo
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# 実際の予定CSVは個人情報を含む可能性があるため、Gitへ追加しない。
+/example_csv/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*:Zone.Identifier
+/S__66289686.jpg
+.vscode/
+.idea/
