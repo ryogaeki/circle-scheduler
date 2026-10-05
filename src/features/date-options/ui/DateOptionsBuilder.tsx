@@ -11,6 +11,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
+import { GitHubMark } from "../../../components/GitHubMark";
 import { publicPath } from "../../../lib/publicPath";
 import {
   WEEKDAY_LABELS,
@@ -206,6 +207,16 @@ export function DateOptionsBuilder() {
                 </div>
               )}
             </div>
+            <a
+              className="header-github-link"
+              href="https://github.com/ryogaeki/circle-scheduler"
+              target="_blank"
+              rel="noreferrer"
+              title="GitHubでソースコードを見る"
+              aria-label="GitHubでソースコードを見る"
+            >
+              <GitHubMark />
+            </a>
           </div>
         </div>
       </header>

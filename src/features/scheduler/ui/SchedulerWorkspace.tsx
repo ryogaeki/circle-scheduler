@@ -27,6 +27,7 @@ import {
   type FormEvent,
 } from "react";
 
+import { GitHubMark } from "../../../components/GitHubMark";
 import { publicPath } from "../../../lib/publicPath";
 import { parseSongCsv } from "../input/parseSongCsv";
 import { buildScoreTableFromSongCsv } from "../input/buildScoreTableFromSongCsv";
@@ -629,6 +630,16 @@ export function SchedulerWorkspace() {
                 </div>
               )}
             </div>
+            <a
+              className="header-github-link"
+              href="https://github.com/ryogaeki/circle-scheduler"
+              target="_blank"
+              rel="noreferrer"
+              title="GitHubでソースコードを見る"
+              aria-label="GitHubでソースコードを見る"
+            >
+              <GitHubMark />
+            </a>
           </div>
         </div>
       </header>

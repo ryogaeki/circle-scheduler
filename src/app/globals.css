@@ -159,8 +159,20 @@ label:focus-within {
   cursor: pointer;
 }
 
+.header-github-link {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  color: #e4ece7;
+  background: #2c332f;
+  border: 1px solid #424d46;
+  border-radius: 5px;
+}
+
 .header-menu-button:hover,
-.header-menu-button[aria-expanded="true"] {
+.header-menu-button[aria-expanded="true"],
+.header-github-link:hover {
   color: #ffffff;
   background: #3b4740;
   border-color: #5a685f;

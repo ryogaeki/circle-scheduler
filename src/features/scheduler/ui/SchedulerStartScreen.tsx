@@ -10,6 +10,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, type ChangeEvent, type DragEvent } from "react";
 
+import { GitHubMark } from "../../../components/GitHubMark";
 import { publicPath } from "../../../lib/publicPath";
 import { parseSongCsv } from "../input/parseSongCsv";
 import {
@@ -86,6 +87,18 @@ export function SchedulerStartScreen() {
             <strong>ぶるさぁ。専用予定調査アプリ</strong>
             <small>スタート</small>
           </span>
+          <div className="header-actions">
+            <a
+              className="header-github-link"
+              href="https://github.com/ryogaeki/circle-scheduler"
+              target="_blank"
+              rel="noreferrer"
+              title="GitHubでソースコードを見る"
+              aria-label="GitHubでソースコードを見る"
+            >
+              <GitHubMark />
+            </a>
+          </div>
         </div>
       </header>
 
