@@ -32,6 +32,7 @@ export type SongCsvData = {
   timeSlots: TimeSlot[];
   songs: Song[];
   marks: AvailabilityMark[][];
+  songComments: string[];
 };
 
 // 時間枠ごと、曲ごとの基本点を持つ表。

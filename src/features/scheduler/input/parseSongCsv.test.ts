@@ -28,6 +28,7 @@ test("調整さんCSVから曲、日付番号、日内番号を読み取る", ()
       [1, 0],
     ],
   );
+  assert.deepEqual(csvData.songComments, ["自由記述", ""]);
 
   const scoreTable = buildScoreTableFromSongCsv(
     csvData,
@@ -53,4 +54,5 @@ test("ホーム画面の例題CSVを3曲・12枠として読み取る", () => {
 
   assert.equal(csvData.songs.length, 3);
   assert.equal(csvData.timeSlots.length, 12);
+  assert.equal(csvData.songComments.length, 3);
 });

@@ -12,6 +12,7 @@ import {
   Play,
   SlidersHorizontal,
   Square,
+  Table2,
   Upload,
   Waypoints,
   X,
@@ -64,6 +65,7 @@ import {
   type CalendarRequestTarget,
 } from "./CalendarRequestEditor";
 import { createWebSchedulerInput } from "./createWebSchedulerInput";
+import { CsvOverviewDialog } from "./CsvOverviewDialog";
 import { ScheduleCalendar } from "./ScheduleCalendar";
 import { ScoreGuideDialog } from "./ScoreGuideDialog";
 import {
@@ -99,6 +101,7 @@ export function SchedulerWorkspace() {
   const [noticeMessage, setNoticeMessage] = useState<string | null>(null);
   const [headerMenuOpen, setHeaderMenuOpen] = useState(false);
   const [scoreGuideOpen, setScoreGuideOpen] = useState(false);
+  const [csvOverviewOpen, setCsvOverviewOpen] = useState(false);
   const [leftPanelOpen, setLeftPanelOpen] = useState(false);
   const [rightPanel, setRightPanel] = useState<RightPanel>(null);
   const [calendarCompact, setCalendarCompact] = useState(false);
@@ -621,6 +624,17 @@ export function SchedulerWorkspace() {
                     role="menuitem"
                     onClick={() => {
                       setHeaderMenuOpen(false);
+                      setCsvOverviewOpen(true);
+                    }}
+                  >
+                    <Table2 aria-hidden="true" size={17} />
+                    ○△×・コメント一覧
+                  </button>
+                  <button
+                    type="button"
+                    role="menuitem"
+                    onClick={() => {
+                      setHeaderMenuOpen(false);
                       setScoreGuideOpen(true);
                     }}
                   >
@@ -942,6 +956,13 @@ export function SchedulerWorkspace() {
       </main>
       {scoreGuideOpen && (
         <ScoreGuideDialog onClose={() => setScoreGuideOpen(false)} />
+      )}
+      {csvOverviewOpen && (
+        <CsvOverviewDialog
+          fileName={loadedCsv.fileName}
+          csvData={loadedCsv.csvData}
+          onClose={() => setCsvOverviewOpen(false)}
+        />
       )}
     </div>
   );

@@ -116,14 +116,26 @@ export function parseSongCsv(csvText: string): SongCsvData {
   }
 
   const songs = readSongs(records[headerRowIndex]);
-  const data: SongCsvData = { timeSlots: [], songs, marks: [] };
+  const data: SongCsvData = {
+    timeSlots: [],
+    songs,
+    marks: [],
+    songComments: songs.map(() => ""),
+  };
   const dateKeys: string[] = [];
   const slotCountsByDay: number[] = [];
 
   for (let rowIndex = headerRowIndex + 1; rowIndex < records.length; rowIndex += 1) {
     const row = records[rowIndex];
     const empty = row.every((cell) => trimAscii(cell).length === 0);
-    if (empty || trimAscii(row[0]) === "コメント") {
+    if (empty) {
+      continue;
+    }
+    if (trimAscii(row[0]) === "コメント") {
+      // コメント列は曲列と同じ順番で保持し、一覧画面だけで使う。
+      data.songComments = songs.map((_, songId) =>
+        trimAscii(row[songId + 1] ?? ""),
+      );
       continue;
     }
     if (row.length !== songs.length + 1) {
